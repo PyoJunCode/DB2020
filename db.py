@@ -176,7 +176,7 @@ class Lecture:
     #        db.commit()
     #        db.close()
 
-s = Lecture(('ghkdalswn312','minjoo12^^'),('20181','20182','20191','20192','20201',))
+s = Lecture(('id','pw'),('20181','20182','20191','20192','20201',))
 #@todo delete id
 
 s.get_lecture_list()
