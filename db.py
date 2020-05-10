@@ -26,7 +26,7 @@ class Lecture:
     # http://hisnet.handong.edu/for_student/course/PLES430M.php?
     HISNET_LECTURE_SEARCH_PAGE = HISNET_ROOT+'/for_student/course/PLES330M.php?'
 
-    db = pymysql.connect(host='52.14.37.173', port=3306, user='root', passwd='dba', db='Project', charset='utf8')
+    db = pymysql.connect(host='52.14.37.173', port=3306, user='root', passwd='dba', db='Project', charset='utf8mb4')
     
     cursor = db.cursor()
 
@@ -91,7 +91,7 @@ class Lecture:
         page = 1
 
         
-        while page < 2 :
+        while page < 3 :
         
             lookup_lecture_url = self.HISNET_LECTURE_SEARCH_PAGE + 'Page='+ str(page)+ '&' +    urlencode_noquote(query)
             resp = self.disguised_get(lookup_lecture_url)
@@ -113,15 +113,29 @@ class Lecture:
                building = tr.text.split('\n')[9]
                total_stu = int(tr.text.split('\n')[10])
                curr_stu = int(tr.text.split('\n')[11])
+               inj = tr.text.split('\n')[14]
+               
                
                check = "select `id` from `course` where course_code =%s limit 1"
                self.cursor.execute(check,(lec_code))
                result = self.cursor.fetchone()
+               
+
+               
+               
                if result is not None:
                   course_id = result[0]
-               if result is None:
-                  sql = "INSERT INTO `course` (`course_code`, `title` ,`credits`,`major_code`) VALUES(%s, %s, %s, %s)"
-                  self.cursor.execute(sql,(lec_code,lec_name,credits, int(hakbu) ))
+               if result is None: # first appeared lecture
+               
+                  checkinj = "select `inj_code` from `injung` where `eng` LIKE %s"
+                  self.cursor.execute(checkinj,("%"+inj+"%"))
+                  injresult = self.cursor.fetchone()
+                  inj_code = None
+                  if injresult is not None:
+                    inj_code = injresult[0]
+                  
+                  sql = "INSERT INTO `course` (`course_code`, `title` ,`credits`,`major_code`,`inj_code`) VALUES(%s, %s, %s, %s,%s)"
+                  self.cursor.execute(sql,(lec_code,lec_name,credits, int(hakbu), inj_code ))
                   self.db.commit()
                   print('과목코드: ' + lec_code + ', lec_name: ' + lec_name + ', hakjum: ' + str(credits) )
                   course_id = self.cursor.lastrowid
@@ -175,8 +189,42 @@ class Lecture:
     #
     #        db.commit()
     #        db.close()
+    
+    def get_kor_inj(self):
+    
+    
+        lookup_lecture_url = self.HISNET_LECTURE_SEARCH_PAGE
+        resp = self.disguised_get(lookup_lecture_url)
+        soup = BeautifulSoup(resp.content, 'html.parser')
+        inj_list = soup.find('select', attrs={'name':'injung'})
 
-s = Lecture(('id','pw'),('20181','20182','20191','20192','20201',))
+        
+        for injung in inj_list.select('option')[1:]:
+            sql = "INSERT INTO `injung` (`inj_code`, `kor`) VALUES(%s, %s) ON DUPLICATE KEY UPDATE  kor=VALUES(kor)"
+            self.cursor.execute(sql,(injung.get('value'),injung.text.strip()))
+            self.db.commit()
+    
+            print(injung.text.strip())
+                
+                
+    def get_eng_inj(self):
+    
+    
+        lookup_lecture_url = self.HISNET_LECTURE_SEARCH_PAGE
+        resp = self.disguised_get(lookup_lecture_url)
+        soup = BeautifulSoup(resp.content, 'html.parser')
+        inj_list = soup.find('select', attrs={'name':'injung'})
+
+        
+        for injung in inj_list.select('option')[1:]:
+            sql = "INSERT INTO `injung` (`inj_code`, `eng`) VALUES(%s, %s) ON DUPLICATE KEY UPDATE  eng=VALUES(eng)"
+            self.cursor.execute(sql,(injung.get('value'),injung.text.strip()))
+            self.db.commit()
+       
+            print(injung.text.strip())
+                
+
+s = Lecture(('id here','pw here'),('20191','20192','20201',))
 #@todo delete id
 
 s.get_lecture_list()

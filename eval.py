@@ -7,7 +7,7 @@ import pymysql
 
 #21800370 seojunpyo DB team project
 
-db = pymysql.connect(host='52.14.37.173', port=3306, user='root', passwd='dba', db='Project', charset='utf8')
+db = pymysql.connect(host='52.14.37.173', port=3306, user='root', passwd='dba', db='Project', charset='utf8mb4')
 
 cursor = db.cursor()
 
@@ -22,8 +22,8 @@ driver.get('https://everytime.kr/login')
 driver.implicitly_wait(2)
 
 
-driver.find_element_by_name('userid').send_keys('id')
-driver.find_element_by_name('password').send_keys('pw')
+driver.find_element_by_name('userid').send_keys('id here')
+driver.find_element_by_name('password').send_keys('pw here')
 
 
 driver.find_element_by_xpath('//*[@id="container"]/form/p[3]/input').click()

@@ -19,6 +19,11 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
   각 과목은 한 번만 저장하고, 과목별 분반을 저장할 때는 해당 과목의 course_id를 fk로 사용한다.
   위의 작업을 유저가 제공한 연도-학기 에 대해 반복한다.
   
+  Functions
+  
+  get_lecture_list() -> 존재하는 전공과 그에 대한 수업들을 추출하고 저장
+  get_kor_inj() -> 인정구분 목록 추출하여 저장
+  
   init params : (('id','pw'),year)     #year format : 20201  == 2020년 1학기
   
   ```
@@ -30,13 +35,19 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
   requests 대신에 selenium을 사용했으므로 사용 시 chrome_driver가 필요하다.
   모든 강의평가를 추출해 해당 과목명, 개설시기를 DB상에 있는 정보에 참조하여 FK로 사용한다.
   
+  id,pw를 설정한뒤 실행
   ```
   
-  csv.py
+  csvreader.py
   ```
   Dependencies: csv, pymysql
   
   2020-1 이전에 제공된 예비수강 엑셀파일을 DB에 추가한다.
   과목코드를 DB의 course 테이블과 대조해 FK키로 쓸 course_id값을 추출해주는 역할을 한다.
+  
+  파일 이름을 설정하고 실행
   ```
+## Todo
+- csvreader.py 파일이름, 연도-학기 외부 파라미터로 받게 설정
+- DB.py get_kor_inj, get_eng_inj 통일화
 
