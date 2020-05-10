@@ -27,6 +27,9 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
   init params : (('id','pw'),year)     #year format : 20201  == 2020년 1학기
   
   ```
+  ![스크린샷 2020-05-10 오후 11 42 31](https://user-images.githubusercontent.com/47979730/81502274-fa3c2d00-9317-11ea-84b4-68168d3eaa51.png)
+  
+  
   eval.py
   ```
   Dependencies:  bs4, pymysql, selenium
