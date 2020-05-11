@@ -11,7 +11,7 @@ import pymysql
 # 21800370 seo jun pyo DB team project
 
 
-getfake = lambda: getdateinfo().replace(' ', '%20')
+
 
 urlencode_noquote = lambda query: urlencode(query, quote_via = lambda k,l,m,n: k)
 
@@ -32,12 +32,7 @@ class Lecture:
 
 
     def __init__(self, idpw, date):
-        """ idpw : hisnet id/password
-            term : semester info
-            the_time : hot time
-            targets : target lectures
-            kakao_token : katalk info
-        """
+
         self.s = requests.Session()
         self.idpw = {
             'id' :       idpw[0],
