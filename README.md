@@ -9,6 +9,60 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
 
 ## Files
 
+  app.py
+  ```python
+  #home/ubuntu/app.py
+  
+  #mobile application으로 부터 요청된 request를 가공하여 mySQL로 쿼리문을 날리고 그 결과를 json으로 반환해주는 WSGI 서버.
+  #예시 : http://52.14.37.173:5000/major?major_code=1 인터넷  주소창에 쳐보면 확인 가능. 
+  #이렇게 얻은 json 데이터를 flutter App에서 받아서 가공 후 표시하는것이 목적
+  
+  #supervisor로 항시 실행하기 전까지는 AWS의 home/ubuntu/ 경로에서 flask run -h 0.0.0.0 을 통해 실행시킨다. 
+  #already running이면 이미 누가 실행중인것.
+  
+  #추가하는 법.
+  #=> 기본적으로 라우팅함수와 그에 대한 쿼리함수를 작성해서 사용.
+  
+  #쿼리함수예:
+  def getGLS():
+    query = "SELECT * from course where inj_code = 'W57'" #실질적인 쿼리 부분 유동적인 부분은에 대한 작성은 뒤에 기술
+    
+    data = encjson.read_sql_query(query, engine) #앞에 입력한 쿼리를 넣어줌
+    
+    return json.loads(data.to_json(orient='records')) #이부분은 거의 고정
+  
+  #라우팅함수 형식
+  @app.route('/<사용할경로>', methods=['GET', 'POST']) //요청할 경로와 method를 설정해준다
+  def 함수이름():
+   ... //쿼리함수로 넘겨줄 변수를 선언하는 등 작업
+   return jsonify(쿼리함수())//쿼리함수의 데이터 결과를 json화 하여 반환
+   
+  #라우팅함수 예: 
+  @app.route('/gls', methods=['GET', 'POST'])
+  def test():
+   return jsonify(getGLS())
+   
+  #변수에 따른 쿼리문 예 (전달받은 전공코드에 해당하는 수업 가져오기):
+  
+  def getMajor(major_code):
+    
+    query = "SELECT * from course where major_code = " + str(major_code) # +를 통해 쿼리문에 변수 합치기
+    
+    data = encjson.read_sql_query(query, engine) #동일
+    
+    return json.loads(data.to_json(orient='records')) #동일
+    
+  @app.route('/major', methods=['GET', 'POST'])
+  def test():
+  #요청을 통해 전달받은 값을 변수로 저장 예: http://52.14.37.173:5000/major?major_code=1로 요청을 보냈을때 request.args.get으로가져옴
+    major_code = request.args.get('major_code') 
+    
+    return jsonify(getMajor(major_code)) #위에서 저장한거 함수로넘겨주기
+  
+   
+ 
+  ```
+
   db.py
   ```
   Dependencies: requests, bs4, pymysql
