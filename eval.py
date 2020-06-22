@@ -22,8 +22,8 @@ driver.get('https://everytime.kr/login')
 driver.implicitly_wait(2)
 
 
-driver.find_element_by_name('userid').send_keys('id here')
-driver.find_element_by_name('password').send_keys('pw here')
+driver.find_element_by_name('userid').send_keys('everytimeID')
+driver.find_element_by_name('password').send_keys('pswd')
 
 
 driver.find_element_by_xpath('//*[@id="container"]/form/p[3]/input').click()

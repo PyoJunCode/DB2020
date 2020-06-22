@@ -24,7 +24,7 @@ class Lecture:
     # http://hisnet.handong.edu/login/_login.php
     HISNET_LOGIN_PAGE = HISNET_ROOT + '/login/_login.php'
     # http://hisnet.handong.edu/for_student/course/PLES430M.php?
-    HISNET_LECTURE_SEARCH_PAGE = HISNET_ROOT+'/for_student/course/PLES330M.php?'
+    HISNET_LECTURE_SEARCH_PAGE = HISNET_ROOT+'/for_student/course/PLES430M.php?'
 
     db = pymysql.connect(host='52.14.37.173', port=3306, user='root', passwd='dba', db='Project', charset='utf8mb4')
     
@@ -81,7 +81,7 @@ class Lecture:
             'gwamok_code':'',
             'ksearch':'search'
         }
-
+        #query['gwamok_code'] = lecture_code
         
         page = 1
 
@@ -99,56 +99,47 @@ class Lecture:
 
             for tr in tbody_items[0].select('tr')[1:]:
 
-               lec_code = tr.text.split('\n')[2]
-               sec_id = int(tr.text.split('\n')[3])
-               lec_name = tr.text.split('\n')[4]
-               credits = float(tr.text.split('\n')[5])
-               prof = tr.text.split('\n')[6]
-               time = tr.text.split('\n')[7]
-               if(tr.text.split('\n')[9] is not ''):
-                    building = tr.text.split('\n')[9]
-               else:
-                    building = 'null'
-               total_stu = int(tr.text.split('\n')[10])
-               if(tr.text.split('\n')[11] is not ''):
-                    curr_stu = int(tr.text.split('\n')[11])
-               else:
-                    curr_stu = 0
-               inj = tr.text.split('\n')[14]
+
+               lec_name = tr.text.split('\n')[3]
+               lec_code = tr.text.split('\n')[1]
+ 
                
-               print(lec_name + ' '+ inj)
+               print(lec_name + lec_code)
             
                check = "select `id` from `course` where course_code =%s limit 1"
                self.cursor.execute(check,(lec_code))
                result = self.cursor.fetchone()
                
 
-               
-               
-               if result is not None:
-                  course_id = result[0]
                if result is None: # first appeared lecture
+                  continue
+                  
+               course_id = result[0]
 
-                  checkinj = "select `inj_code` from `injung` where `eng` = %s"
-                  self.cursor.execute(checkinj,(inj.strip()))
-                  injresult = self.cursor.fetchone()
-                  inj_code = None
-                  if injresult is not None:
-                    inj_code = injresult[0]
-                    print('inj_code: ' +inj_code)
+               sec_id = int(tr.text.split('\n')[2])
 
-                  sql = "INSERT INTO `course` (`course_code`, `title` ,`credits`,`major_code`,`inj_code`) VALUES(%s, %s, %s, %s,%s)"
-                  self.cursor.execute(sql,(lec_code,lec_name,credits, int(hakbu), inj_code ))
-                  self.db.commit()
-                  print('과목코드: ' + lec_code + ', lec_name: ' + lec_name + ', hakjum: ' + str(credits) )
-                  course_id = self.cursor.lastrowid
+               first = int(tr.text.split('\n')[5])
 
+               second = int(tr.text.split('\n')[6])
 
-               ssql = "INSERT INTO `section` (`open_id`, `course_id` ,`sec_id`,`building`, `time`,`prof_name`,`total_stu`,`curr_stu`) VALUES(%s,%s,%s,%s, %s, %s,%s,%s)"
-               self.cursor.execute(ssql,(open_id,course_id,sec_id,building,time,prof,total_stu,curr_stu))
+               third = int(tr.text.split('\n')[7])
+
+               fourth = int(tr.text.split('\n')[8])
+
+               all = int(tr.text.split('\n')[9])
+
+               retake = int(tr.text.split('\n')[10])
                
-               #print('분반: ' + str(sec_id) + ', time: ' + time ) //for debug
+               print()
+
+
+               sql = "insert into basket (`open_id`, `course_id`, `sec_id`, `1st`, `2nd`, `3rd`, `4th`,`all`,     `re_take`) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+
+               self.cursor.execute(sql, (open_id, course_id, sec_id, first, second, third, fourth, all, retake))
+
                
+#               print('course:' + str(course_id) +'분반: ' + str(sec_id) + ', first: ' + str(first) + ', second: ' + str(second) + ', third: ' + str(third) + ', fourth: ' + str(fourth) + ', re: ' + str(retake) ) #for debug
+            
                #print('prof: ' + prof  + ', building: ' + building) //for debug
                print()
                
@@ -182,7 +173,7 @@ class Lecture:
                 self.db.commit()
                 open_id = self.cursor.lastrowid
             
-            for major in major_list.select('option')[3:]:
+            for major in major_list.select('option')[1:]:
                 sql = "INSERT INTO `major` (`major_code`, `major_name`) VALUES(%s, %s) ON DUPLICATE KEY UPDATE major_code=VALUES(major_code), major_name =VALUES(major_name)"
                 self.cursor.execute(sql,(major.get('value'),major.text.strip()))
                 self.db.commit()
@@ -229,7 +220,7 @@ class Lecture:
             print(injung.text.strip())
                 
 
-s = Lecture(('hisnetID','pswd'),('20202',))
+s = Lecture(('hisnetID','pswd'),('20201',))
 #@todo delete id
 
 s.get_lecture_list()
