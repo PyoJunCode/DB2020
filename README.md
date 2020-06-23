@@ -15,7 +15,8 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
   #home/ubuntu/app.py
   
   #mobile application으로 부터 요청된 request를 가공하여 mySQL로 쿼리문을 날리고 그 결과를 json으로 반환해주는 WSGI REST API 서버.
-  #예시 : http://52.14.37.173:5000/major?major_code=1 인터넷  주소창에 쳐보면 확인 가능. 
+  #해당하는 라우팅주소 + parameter를 만들어 인터넷 창에 쳐서 가시적으로 확인 
+  #예시 : http://52.14.37.173:5000/basket_byC?major_code=1&open_time=20201&order=DESC 인터넷  주소창에 쳐보면 확인 가능. 
   #이렇게 얻은 json 데이터를 flutter App에서 받아서 가공 후 표시하는것이 목적
   
   
