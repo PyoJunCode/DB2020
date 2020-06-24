@@ -11,8 +11,8 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
 
 ## Files
 
-  app.py (REST API Server)
-  API서버 구축으로 인해 어플리케이션 뿐 만 아니라, 웹이나 다른 서비스로도 쉽게 이식할 수 있다.
+  app.py (REST API Server)<br>
+  API서버 구축으로 인해 어플리케이션 뿐 만 아니라, 웹이나 다른 서비스로도 쉽게 DB를 이식/사용할 수 있다.
   
   ```python
   #home/ubuntu/app.py
