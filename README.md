@@ -95,6 +95,8 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
   id,pw를 설정한뒤 실행
   ```
   
+  ![image](https://user-images.githubusercontent.com/47979730/85479538-52459f00-b5f9-11ea-9f31-a1caa7b17bba.png){: width="50%" height="50%"}
+  
   csvreader.py
   ```
   Dependencies: csv, pymysql
@@ -103,7 +105,10 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
   과목코드를 DB의 course 테이블과 대조해 FK키로 쓸 course_id값을 추출해주는 역할을 한다.
   
   파일 이름을 설정하고 실행
+  
   ```
+  
+  ![image](https://user-images.githubusercontent.com/47979730/85479506-435eec80-b5f9-11ea-9009-5d955d91139f.png){: width="50%" height="50%"}
 ## Todo
 - csvreader.py 파일이름, 연도-학기 외부 파라미터로 받게 설정
 - DB.py get_kor_inj, get_eng_inj 통일화
