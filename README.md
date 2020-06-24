@@ -6,10 +6,13 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
  OS : ubuntu18.04.4LTS<br>
  mySQL : 5.7.30<br>
  python3
+ gunicorn3
+ supervisord
 
 ## Files
 
   app.py (REST API Server)
+  API서버 구축으로 인해 어플리케이션 뿐 만 아니라, 웹이나 다른 서비스로도 쉽게 이식할 수 있다.
   
   ```python
   #home/ubuntu/app.py
@@ -18,6 +21,7 @@ DB수업 데이터베이스 구축을 위한 python 코드들.
   #해당하는 라우팅주소 + parameter를 만들어 인터넷 창에 쳐서 가시적으로 확인 
   #예시 : http://52.14.37.173:5000/basket_byC?major_code=1&open_time=20201&order=DESC 인터넷  주소창에 쳐보면 확인 가능. 
   #이렇게 얻은 json 데이터를 flutter App에서 받아서 가공 후 표시하는것이 목적
+  #AWS서버 안에 gunicorn3와 supervisord를 이용해서 항상 켜져있다.
   
   
   #추가하는 법.
